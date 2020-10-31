@@ -6,12 +6,12 @@ const VehicleEdit = (props) => {
     return (
         <Edit title="Uredi stroj" {...props}>
             <SimpleForm>
-                 <TextInput source="name" />
-                 <SelectInput source="type" choices={vehicleTypes}/>
-                <TextInput source="code" />
-                <TextInput source="registration" />
-                <TextInput source="chassis" />
-                <TextInput source="owner" />
+                <TextInput label="Naziv" source="name" />
+                <SelectInput label="Tip stroja" source="type" choices={vehicleTypes}/>
+                <TextInput label="Oznaka" source="code" />
+                <TextInput label="Registracijska oznaka" source="registration" />
+                <TextInput label="Broj šasije" source="chassis" />
+                <TextInput label="Vlasnik" source="owner" />
                 <DateInput label="Datum isteka" source="expires" />
             </SimpleForm>
         </Edit>
