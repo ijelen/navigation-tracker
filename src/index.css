@@ -15,7 +15,3 @@ code {
 .MuiListItemText-secondary span {
   display: block;
 }
-
-span[class*="RaSimpleList-tertiary"] {
-  opacity: 1;
-}

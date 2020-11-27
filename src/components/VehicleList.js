@@ -7,32 +7,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
-const VehicleList = (props) => {
+import {formatRecord, capitalizeFirstLetter} from '../utils'
 
-    const formatRecord = (record, formating) => {
-        if (typeof record.expires === "string" && typeof Date.parse(record.expires) === "number") {
-            const diffDays = (Date.parse(record.expires) - new Date().getTime()) / (1000 * 60 * 60 * 24);
-            let returnValue = "";
-            if (diffDays < 0) {
-                // Registracija je istekla
-                returnValue = formating.expired
-            } else if (diffDays < 7) {
-                // Registracija istice za manje od tjedan dana
-                returnValue = formating.expiring
-            }
-            return returnValue
-        }
-    };
+const VehicleList = (props) => {
 
     const postRowStyle = (record, index) => {
         return ({
             backgroundColor: formatRecord(record, {expired: "rgba(252, 121, 132, 0.75)", expiring: "rgba(247, 232, 96, 0.83)"})
         });
     };
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 
     const MySimpleList = (props) => {
         const { ids, data, basePath } = useListContext();
@@ -60,7 +43,7 @@ const VehicleList = (props) => {
                         secondary={(
                             <div>
                                 <span>{data[id].registration}, {data[id].chassis} {data[id].code && `(${data[id].code})`}</span>
-                                <span>vlasnik: {data[id].owner}</span>
+                                <span>Vlasnik: {data[id].owner}</span>
                             </div>
                             )} 
                     />
