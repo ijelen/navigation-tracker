@@ -28,15 +28,15 @@ const ColoredDateInput = (props) => {
 ColoredDateInput.defaultProps = DateInput.defaultProps;
 const VehicleEdit = (props) => {
   return (
-    <Edit title="Uredi stroj" {...props}>
+    <Edit title="Edit Vehicle" {...props}>
       <SimpleForm>
-        <TextInput label="Naziv" source="name" />
-        <SelectInput label="Tip stroja" source="type" choices={vehicleTypes} />
-        <TextInput label="Oznaka" source="code" />
-        <TextInput label="Registracijska oznaka" source="registration" />
-        <TextInput label="Broj šasije" source="chassis" />
-        <TextInput label="Vlasnik" source="owner" />
-        <ColoredDateInput label="Datum isteka" source="expires" />
+        <TextInput label="Name" source="name" />
+        <SelectInput label="Type" source="type" choices={vehicleTypes} />
+        <TextInput label="Code" source="code" />
+        <TextInput label="Registration code" source="registration" />
+        <TextInput label="Chassis" source="chassis" />
+        <TextInput label="Owner" source="owner" />
+        <ColoredDateInput label="Expiry date" source="expires" />
       </SimpleForm>
     </Edit>
   );
