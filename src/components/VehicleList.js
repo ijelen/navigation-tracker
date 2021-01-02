@@ -16,18 +16,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 
 import { formatRecord, capitalizeFirstLetter } from "../utils";
+import { bgColors } from "../data/settings";
 
 const VehicleList = (props) => {
   const postRowStyle = (record, index) => {
     return {
       backgroundColor: formatRecord(record, {
-        expired: "rgba(252, 121, 132, 0.75)",
-        expiring: "rgba(247, 232, 96, 0.83)",
+        expired: bgColors.expired,
+        expiring: bgColors.expiring,
       }),
     };
   };
 
-  const MySimpleList = (props) => {
+  const MySimpleList = () => {
     const { ids, data, basePath } = useListContext();
     return (
       <MuiList>
@@ -35,8 +36,8 @@ const VehicleList = (props) => {
           <ListItem
             style={{
               backgroundColor: formatRecord(data[id], {
-                expired: "rgba(252, 121, 132, 0.75)",
-                expiring: "rgba(247, 232, 96, 0.83)",
+                expired: bgColors.expired,
+                expiring: bgColors.expiring,
               }),
             }}
             key={id}
