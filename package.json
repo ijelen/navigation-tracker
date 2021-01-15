@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "firebase": "^7.24.0",
+    "netlify": "^6.0.7",
     "prop-types": "^15.7.2",
     "ra-data-simple-rest": "^3.9.3",
     "react": "^16.14.0",
@@ -21,7 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && netlify deploy --prod --dir=build"
   },
   "eslintConfig": {
     "extends": "react-app"
