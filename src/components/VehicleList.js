@@ -13,6 +13,9 @@ import { useMediaQuery } from "@material-ui/core";
 import { List as MuiList } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 
 import { formatRecord, capitalizeFirstLetter } from "../utils";
@@ -32,17 +35,23 @@ const VehicleList = (props) => {
     const [imageUrl, setImageUrl] = useState(
       record[source].src.replace("image", "image_200x200")
     );
-    // Reload the images after 1 second. That's needed because of the resizing.
+    // Reload the images after 1 second. That's needed because of the server resizing.
     useEffect(() => {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setImageUrl(imageUrl + "?" + new Date());
       }, 1000);
+      return () => {
+        clearTimeout(timeout);
+      };
     }, [imageUrl]);
     if (record[source]) {
       return (
-        <div style={{ height: 200, width: 200, textAlign: "center" }}>
-          <img alt={record.name} src={imageUrl} />
-        </div>
+        <Avatar
+          variant="rounded"
+          style={{ width: 90, height: 90, marginRight: 10 }}
+          alt={record.name}
+          src={imageUrl}
+        />
       );
     } else {
       return null;
@@ -54,56 +63,58 @@ const VehicleList = (props) => {
     return (
       <MuiList>
         {ids.map((id) => (
-          <ListItem
-            style={{
-              backgroundColor: formatRecord(data[id], {
-                expired: bgColors.expired,
-                expiring: bgColors.expiring,
-              }),
-            }}
-            key={id}
-            button
-            component="a"
-            href={`#${basePath}/${id}`}
-          >
-            <ListItemText
-              primary={
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <ImagePreview
-                      record={data[id]}
-                      source="image"
-                      title="image.Image"
-                    />
+          <>
+            <ListItem
+              style={{
+                backgroundColor: formatRecord(data[id], {
+                  expired: bgColors.expired,
+                  expiring: bgColors.expiring,
+                }),
+              }}
+              key={id}
+              button
+              component="a"
+              href={`#${basePath}/${id}`}
+            >
+              <ListItemAvatar>
+                <ImagePreview
+                  record={data[id]}
+                  source="image"
+                  title="image.Image"
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      {capitalizeFirstLetter(data[id].type)} {data[id].name}
+                    </Grid>
+                    <Grid item>
+                      <DateField
+                        record={data[id]}
+                        source="expires"
+                        options={{
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    {capitalizeFirstLetter(data[id].type)} {data[id].name}
-                  </Grid>
-                  <Grid item>
-                    <DateField
-                      record={data[id]}
-                      source="expires"
-                      options={{
-                        weekday: "short",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              }
-              secondary={
-                <div>
-                  <span>
-                    {data[id].registration}, {data[id].chassis}{" "}
-                    {data[id].code && `(${data[id].code})`}
-                  </span>
-                  <span>Owner: {data[id].owner}</span>
-                </div>
-              }
-            />
-          </ListItem>
+                }
+                secondary={
+                  <div>
+                    <span>
+                      {data[id].registration}, {data[id].chassis}{" "}
+                      {data[id].code && `(${data[id].code})`}
+                    </span>
+                    <span>Owner: {data[id].owner}</span>
+                  </div>
+                }
+              />
+            </ListItem>
+            <Divider light={true} />
+          </>
         ))}
       </MuiList>
     );
