@@ -15,3 +15,6 @@ code {
 .MuiListItemText-secondary span {
   display: block;
 }
+p {
+  margin: 0;
+}

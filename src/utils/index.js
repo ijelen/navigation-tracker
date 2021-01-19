@@ -33,6 +33,15 @@ export const isExpiring = (expires) => {
   return false;
 };
 
+export const daysLeft = (expires) => {
+  if (typeof expires === "string" && typeof Date.parse(expires) === "number") {
+    const diffDays =
+      (Date.parse(expires) - new Date().getTime()) / (1000 * 60 * 60 * 24);
+    return Math.ceil(diffDays);
+  }
+  return false;
+};
+
 export const capitalizeFirstLetter = function (string) {
   if (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);

@@ -5,6 +5,7 @@ import VehicleCreate from "./components/VehicleCreate";
 import VehicleEdit from "./components/VehicleEdit";
 import Dashboard from "./components/Dashboard";
 import CommuteTwoToneIcon from "@material-ui/icons/CommuteTwoTone";
+// import { createMuiTheme } from "@material-ui/core/styles";
 import firebase from "firebase";
 import {
   FirebaseAuthProvider,
