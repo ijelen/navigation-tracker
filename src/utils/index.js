@@ -1,10 +1,12 @@
-import { warnBeforeNumberOfDays } from "../data/settings";
-export const formatRecord = (record, formating) => {
+export const formatRecord = (record, formating, warnBeforeNumberOfDays) => {
   let returnValue = "";
+  if (!record) {
+    return returnValue;
+  }
   if (isExpired(record.expires)) {
     // Registracija je istekla
     returnValue = formating.expired;
-  } else if (isExpiring(record.expires)) {
+  } else if (isExpiring(record.expires, warnBeforeNumberOfDays)) {
     // Registracija istice za manje od tjedan dana
     returnValue = formating.expiring;
   }
@@ -22,7 +24,7 @@ export const isExpired = (expires) => {
   return false;
 };
 
-export const isExpiring = (expires) => {
+export const isExpiring = (expires, warnBeforeNumberOfDays) => {
   if (typeof expires === "string" && typeof Date.parse(expires) === "number") {
     const diffDays =
       (Date.parse(expires) - new Date().getTime()) / (1000 * 60 * 60 * 24);

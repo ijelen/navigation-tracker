@@ -9,17 +9,23 @@ import {
 } from "react-admin";
 import vehicleTypes from "../data/vehicleTypes";
 import { formatRecord } from "../utils";
+import { useTheme } from "@material-ui/core/styles";
 
 const ColoredDateInput = (props) => {
+  const theme = useTheme();
   return (
     <DateInput
       {...props}
       inputProps={{
         style: {
-          backgroundColor: formatRecord(props.record, {
-            expired: "rgba(252, 121, 132, 0.75)",
-            expiring: "rgba(247, 232, 96, 0.83)",
-          }),
+          backgroundColor: formatRecord(
+            props.record,
+            {
+              expired: theme.palette.error.main,
+              expiring: theme.palette.warning.main,
+            },
+            theme.warnBeforeNumberOfDays
+          ),
         },
       }}
     />

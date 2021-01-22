@@ -8,6 +8,12 @@ import {
   EditButton,
   DeleteButton,
 } from "react-admin";
+import {
+  TopToolbar,
+  SortButton,
+  CreateButton,
+  ExportButton,
+} from "react-admin";
 import { useMediaQuery } from "@material-ui/core";
 import "@fontsource/roboto";
 import { List as MuiList } from "@material-ui/core";
@@ -16,28 +22,28 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
-import Grid from "@material-ui/core/Grid";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import ExpiryLinearProgress from "./ExpiryLinearProgress";
+import Typography from "@material-ui/core/Typography";
 
-import { formatRecord, capitalizeFirstLetter, daysLeft } from "../utils";
-import { bgColors, defaultImage } from "../data/settings";
+import { formatRecord, capitalizeFirstLetter } from "../utils";
+import { useTheme } from "@material-ui/core/styles";
 
-const ImagePreview = ({ record, source }) => {
+const AvatarWrapper = ({ record, source }) => {
   let tempImageUrl;
-  if (record[source]) {
+  const theme = useTheme();
+  if (record && record[source]) {
     tempImageUrl = record[source].src.replace("image", "image_200x200");
   } else {
-    tempImageUrl = defaultImage;
+    tempImageUrl = theme.defaultImage;
   }
   const [imageUrl, setImageUrl] = useState(tempImageUrl);
   const [imageReloaded, setImageReloaded] = useState(false);
-  // Reload the images after 3 second. That's needed because of the server resizing.
+  // Reload the images after 3 second. That's needed because of the server image resizing.
   useEffect(() => {
     if (!imageReloaded) {
       const timeout = setTimeout(() => {
         setImageUrl(imageUrl + "?" + new Date());
         setImageReloaded(true);
-        console.log("Reload!");
       }, 3000);
       return () => {
         clearTimeout(timeout);
@@ -50,7 +56,7 @@ const ImagePreview = ({ record, source }) => {
     <Avatar
       variant="rounded"
       style={{ width: 90, height: 90, marginRight: 10 }}
-      alt={record.name}
+      alt={record ? record.name : ""}
       src={imageUrl}
     />
   );
@@ -64,7 +70,7 @@ const MySimpleList = () => {
         <>
           <ListItem key={id} button component="a" href={`#${basePath}/${id}`}>
             <ListItemAvatar>
-              <ImagePreview
+              <AvatarWrapper
                 record={data[id]}
                 source="image"
                 title="image.Image"
@@ -74,47 +80,22 @@ const MySimpleList = () => {
               primary={
                 <>
                   <div>
-                    <p style={{ fontSize: "1rem" }}>
+                    <Typography variant="subtitle1" component="h2">
                       {capitalizeFirstLetter(data[id].type)} {data[id].name}{" "}
                       {data[id].registration && `(${data[id].registration})`}
-                    </p>
-                    <p style={{ fontSize: ".8rem" }}>
+                    </Typography>
+                    <Typography variant="subtitle2" component="p">
                       {data[id].code && `Code: ${data[id].code}`}
-                    </p>
-                    <p style={{ fontSize: ".8rem" }}>
+                    </Typography>
+                    <Typography variant="subtitle2" component="p">
                       {data[id].chassis && `Chassis: ${data[id].chassis}`}
-                    </p>
-                    <p style={{ fontSize: ".8rem" }}>
+                    </Typography>
+                    <Typography variant="subtitle2" component="p">
                       {data[id].owner && `Owner: ${data[id].owner}`}
-                    </p>
+                    </Typography>
                   </div>
                   <div>
-                    <LinearProgress
-                      variant="determinate"
-                      value={daysLeft(data[id].expires) * (1 / 365) * 100}
-                      style={{ marginTop: ".5rem" }}
-                      color="primary"
-                    />
-                    <Grid container justify="space-between">
-                      <Grid item>
-                        <span style={{ fontSize: ".8rem", color: "grey" }}>
-                          {daysLeft(data[id].expires)} day
-                          {daysLeft(data[id].expires) > 1 ? "s" : null} left
-                        </span>
-                      </Grid>
-                      <Grid item>
-                        <DateField
-                          record={data[id]}
-                          source="expires"
-                          options={{
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          }}
-                          style={{ fontSize: ".8rem", color: "grey" }}
-                        />
-                      </Grid>
-                    </Grid>
+                    <ExpiryLinearProgress record={data[id]} />
                   </div>
                 </>
               }
@@ -127,13 +108,26 @@ const MySimpleList = () => {
   );
 };
 
+const ListActions = () => (
+  <TopToolbar>
+    <SortButton fields={["expires", "createdate"]} />
+    <CreateButton basePath="/vehicles" />
+    <ExportButton />
+  </TopToolbar>
+);
+
 const VehicleList = (props) => {
+  const theme = useTheme();
   const postRowStyle = (record, index) => {
     return {
-      backgroundColor: formatRecord(record, {
-        expired: bgColors.expired,
-        expiring: bgColors.expiring,
-      }),
+      backgroundColor: formatRecord(
+        record,
+        {
+          expired: theme.palette.error.main,
+          expiring: theme.palette.warning.main,
+        },
+        theme.warnBeforeNumberOfDays
+      ),
     };
   };
   const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -141,15 +135,15 @@ const VehicleList = (props) => {
   return (
     <List
       title="Registration Tracker"
-      bulkActionButtons={false}
       sort={{ field: "expires", order: "ASC" }}
+      actions={<ListActions />}
       {...props}
     >
       {isSmall ? (
         <MySimpleList />
       ) : (
         <Datagrid rowStyle={postRowStyle}>
-          <ImagePreview label="Image" source="image" />
+          <AvatarWrapper label="Image" source="image" sortable={false} />
           <TextField label="Name" source="name" />
           <TextField label="Expires" source="expires" />
           <TextField label="Type" source="type" />

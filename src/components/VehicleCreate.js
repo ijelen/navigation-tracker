@@ -52,7 +52,7 @@ const VehicleCreate = (props) => {
         <DateInput
           label="Expiry date"
           source="expires"
-          defaultValue={new Date()}
+          initialValue={new Date().toISOString().slice(0, 10)}
         />
       </SimpleForm>
     </Create>

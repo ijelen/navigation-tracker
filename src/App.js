@@ -3,9 +3,8 @@ import { Admin, Resource } from "react-admin";
 import VehicleList from "./components/VehicleList";
 import VehicleCreate from "./components/VehicleCreate";
 import VehicleEdit from "./components/VehicleEdit";
-import Dashboard from "./components/Dashboard";
 import CommuteTwoToneIcon from "@material-ui/icons/CommuteTwoTone";
-// import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 import firebase from "firebase";
 import {
   FirebaseAuthProvider,
@@ -33,13 +32,19 @@ const options = {
 const dataProvider = FirebaseDataProvider(firebaseConfig, options);
 const authProvider = FirebaseAuthProvider(firebaseConfig, options);
 
+const theme = createMuiTheme({
+  typography: { caption: { color: "grey" }, subtitle2: { fontSize: ".75rem" } },
+  warnBeforeNumberOfDays: 7,
+  defaultImage: "/logo512.png",
+});
+
 function App() {
   return (
     <Admin
       title="Registration Tracker"
       dataProvider={dataProvider}
       authProvider={authProvider}
-      dashboard={Dashboard}
+      theme={theme}
     >
       <Resource
         icon={CommuteTwoToneIcon}
