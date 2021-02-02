@@ -4,14 +4,16 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import { DateField } from "react-admin";
 import { daysLeft } from "../utils";
+import { useTheme } from "@material-ui/core/styles";
 
 export default function ExpiryLinearProgress({ record }) {
+  const theme = useTheme();
+  const progressHundredPercent = theme.progressHundredPercent && 365;
   return (
     <div>
       <LinearProgress
         variant="determinate"
-        value={daysLeft(record.expires) * (1 / 365) * 100}
-        style={{ marginTop: ".5rem" }}
+        value={daysLeft(record.expires) * (1 / progressHundredPercent) * 100}
         color="primary"
       />
       <Grid container justify="space-between">

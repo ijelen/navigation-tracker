@@ -95,7 +95,10 @@ const MySimpleList = () => {
                     </Typography>
                   </div>
                   <div>
-                    <ExpiryLinearProgress record={data[id]} />
+                    <ExpiryLinearProgress
+                      style={{ marginTop: ".5rem" }}
+                      record={data[id]}
+                    />
                   </div>
                 </>
               }
@@ -120,14 +123,18 @@ const VehicleList = (props) => {
   const theme = useTheme();
   const postRowStyle = (record, index) => {
     return {
-      backgroundColor: formatRecord(
+      borderColor: theme.palette.primary.main,
+      borderLeftColor: formatRecord(
         record,
         {
           expired: theme.palette.error.main,
           expiring: theme.palette.warning.main,
+          default: "transparent",
         },
         theme.warnBeforeNumberOfDays
       ),
+      borderLeftWidth: "2px",
+      borderLeftStyle: "solid",
     };
   };
   const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -145,7 +152,6 @@ const VehicleList = (props) => {
         <Datagrid rowStyle={postRowStyle}>
           <AvatarWrapper label="Image" source="image" sortable={false} />
           <TextField label="Name" source="name" />
-          <TextField label="Expires" source="expires" />
           <TextField label="Type" source="type" />
           <TextField label="Registration code" source="registration" />
           <TextField label="Chassis" source="chassis" />

@@ -10,6 +10,7 @@ import {
   FirebaseAuthProvider,
   FirebaseDataProvider,
 } from "react-admin-firebase";
+import { isExpired, isExpiring } from "./utils";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
@@ -36,6 +37,7 @@ const theme = createMuiTheme({
   typography: { caption: { color: "grey" }, subtitle2: { fontSize: ".75rem" } },
   warnBeforeNumberOfDays: 7,
   defaultImage: "/logo512.png",
+  progressHundredPercent: 365,
 });
 
 function App() {

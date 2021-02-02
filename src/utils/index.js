@@ -1,5 +1,5 @@
 export const formatRecord = (record, formating, warnBeforeNumberOfDays) => {
-  let returnValue = "";
+  let returnValue = formating.default;
   if (!record) {
     return returnValue;
   }
