@@ -6,10 +6,12 @@ import {
   DateInput,
   SelectInput,
   ImageInput,
+  required,
 } from "react-admin";
 import vehicleTypes from "../data/vehicleTypes";
 import { formatRecord } from "../utils";
 import { useTheme } from "@material-ui/core/styles";
+import { useMediaQuery } from "@material-ui/core";
 
 const ColoredDateInput = (props) => {
   const theme = useTheme();
@@ -44,10 +46,16 @@ const ImagePreview = ({ record, source }) => {
 };
 
 const VehicleEdit = (props) => {
+  const isSmall = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   return (
     <Edit title="Edit Vehicle" {...props}>
       <SimpleForm>
-        <TextInput label="Name" source="name" />
+        <TextInput
+          label="Name"
+          source="name"
+          validate={[required()]}
+          fullWidth={isSmall}
+        />
         <ImageInput
           source="image"
           label="Image"
@@ -57,12 +65,25 @@ const VehicleEdit = (props) => {
           <ImagePreview source="src" />
         </ImageInput>
 
-        <SelectInput label="Type" source="type" choices={vehicleTypes} />
-        <TextInput label="Code" source="code" />
-        <TextInput label="Registration code" source="registration" />
-        <TextInput label="Chassis" source="chassis" />
-        <TextInput label="Owner" source="owner" />
-        <ColoredDateInput label="Expiry date" source="expires" />
+        <SelectInput
+          label="Type"
+          source="type"
+          choices={vehicleTypes}
+          fullWidth={isSmall}
+        />
+        <TextInput label="Code" source="code" fullWidth={isSmall} />
+        <TextInput
+          label="Registration code"
+          source="registration"
+          fullWidth={isSmall}
+        />
+        <TextInput label="Chassis" source="chassis" fullWidth={isSmall} />
+        <TextInput label="Owner" source="owner" fullWidth={isSmall} />
+        <ColoredDateInput
+          label="Expiry date"
+          source="expires"
+          fullWidth={isSmall}
+        />
       </SimpleForm>
     </Edit>
   );

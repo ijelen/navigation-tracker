@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   List,
   useListContext,
@@ -20,47 +20,13 @@ import { List as MuiList } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
+import AvatarWrapper from "./AvatarWrapper";
 import Divider from "@material-ui/core/Divider";
 import ExpiryLinearProgress from "./ExpiryLinearProgress";
 import Typography from "@material-ui/core/Typography";
 
 import { formatRecord, capitalizeFirstLetter } from "../utils";
 import { useTheme } from "@material-ui/core/styles";
-
-const AvatarWrapper = ({ record, source }) => {
-  let tempImageUrl;
-  const theme = useTheme();
-  if (record && record[source]) {
-    tempImageUrl = record[source].src.replace("image", "image_200x200");
-  } else {
-    tempImageUrl = theme.defaultImage;
-  }
-  const [imageUrl, setImageUrl] = useState(tempImageUrl);
-  const [imageReloaded, setImageReloaded] = useState(false);
-  // Reload the images after 3 second. That's needed because of the server image resizing.
-  useEffect(() => {
-    if (!imageReloaded) {
-      const timeout = setTimeout(() => {
-        setImageUrl(imageUrl + "?" + new Date());
-        setImageReloaded(true);
-      }, 3000);
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-    // eslint-disable-next-line
-  }, []);
-
-  return (
-    <Avatar
-      variant="rounded"
-      style={{ width: 90, height: 90, marginRight: 10 }}
-      alt={record ? record.name : ""}
-      src={imageUrl}
-    />
-  );
-};
 
 const MySimpleList = () => {
   const { ids, data, basePath } = useListContext();
