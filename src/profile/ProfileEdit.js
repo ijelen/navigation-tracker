@@ -4,6 +4,7 @@ import {
   TextInput,
   BooleanInput,
   CheckboxGroupInput,
+  SelectInput,
   SimpleForm,
 } from "react-admin";
 
@@ -29,7 +30,14 @@ const ProfileEdit = ({ staticContext, ...props }) => {
     >
       <SimpleForm>
         <TextInput source="nickname" />
-        <TextInput source="language" />
+        <SelectInput
+          label="Language"
+          source="language"
+          choices={[
+            { id: "en", name: "English" },
+            { id: "hr", name: "Hrvatski" },
+          ]}
+        />
         <TextInput source="email" />
         <BooleanInput label="Receive reports by email" source="receiveEmail" />
         <CheckboxGroupInput
