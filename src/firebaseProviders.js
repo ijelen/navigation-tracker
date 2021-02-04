@@ -25,29 +25,58 @@ const options = {
 // A function decorating a dataProvider for handling user profiles
 const handleUserProfile = (dataProvider) => (verb, resource, params) => {
   // We know we only GET or UPDATE the profile as there is only one for the current user
-  // To showcase how we can do something completely different here, we'll store it in local storage
-  // You can replace this with a customized fetch call to your own API route too
-  if (resource === "profile") {
-    if (verb === GET_ONE) {
-      const storedProfile = localStorage.getItem("profile");
 
-      if (storedProfile) {
-        return Promise.resolve({
-          data: JSON.parse(storedProfile),
-        });
-      }
-      // No profile yet, return a default one
-      // It's important that we send the same id as requested in params
-      // Indeed, react-admin will verify it and may throw an error if they are different
-      // I don't have to do it when the profile exists as it will be included in the data stored in the local storage
-      return Promise.resolve({
-        data: { id: params.id, language: "en" },
+  if (resource === "profile") {
+    const db = firebase.firestore();
+    if (verb === GET_ONE) {
+      return new Promise((resolve, reject) => {
+        (async () => {
+          const user = await authProvider.checkAuth();
+          const docRef = db.collection("users").doc(user.uid);
+          const doc = await docRef.get();
+          if (doc.exists) {
+            // User doc exists
+            resolve({
+              data: {
+                id: params.id,
+                language: doc.data().language,
+                email: doc.data().email,
+                receiveEmail: doc.data().receiveEmail,
+                weekdays: doc.data().weekdays,
+                nickname: doc.data().nickname,
+              },
+            });
+          } else {
+            // User doc doesn't exist
+            await docRef.set({ email: user.email });
+            resolve({
+              data: {
+                id: params.id,
+                language: "en",
+                email: user.email,
+                receiveEmail: true,
+              },
+            });
+          }
+        })();
       });
     }
 
     if (verb === UPDATE) {
-      localStorage.setItem("profile", JSON.stringify(params.data));
-      return Promise.resolve({ data: params.data });
+      return new Promise((resolve, reject) => {
+        (async () => {
+          const user = await authProvider.checkAuth();
+          const docRef = db.collection("users").doc(user.uid);
+          await docRef.set({
+            email: params.data.email,
+            language: params.data.language,
+            receiveEmail: params.data.receiveEmail,
+            weekdays: params.data.weekdays,
+            nickname: params.data.nickname,
+          });
+          resolve({ data: params.data });
+        })();
+      });
     }
   }
   // Fallback to the dataProvider default handling

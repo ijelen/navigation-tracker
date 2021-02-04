@@ -1,5 +1,11 @@
 import React from "react";
-import { Edit, TextInput, SimpleForm } from "react-admin";
+import {
+  Edit,
+  TextInput,
+  BooleanInput,
+  CheckboxGroupInput,
+  SimpleForm,
+} from "react-admin";
 
 const ProfileEdit = ({ staticContext, ...props }) => {
   return (
@@ -23,7 +29,23 @@ const ProfileEdit = ({ staticContext, ...props }) => {
     >
       <SimpleForm>
         <TextInput source="nickname" />
+        <TextInput source="language" />
         <TextInput source="email" />
+        <BooleanInput label="Receive reports by email" source="receiveEmail" />
+        <CheckboxGroupInput
+          source="weekdays"
+          label="Weekdays"
+          helperText="Choose when you want to receive email reports."
+          choices={[
+            { id: 0, name: "Monday" },
+            { id: 1, name: "Tuesday" },
+            { id: 2, name: "Wednesday" },
+            { id: 3, name: "Thursday" },
+            { id: 4, name: "Friday" },
+            { id: 5, name: "Saturday" },
+            { id: 6, name: "Sunday" },
+          ]}
+        />
       </SimpleForm>
     </Edit>
   );
