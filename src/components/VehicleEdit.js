@@ -68,6 +68,8 @@ const VehicleEdit = (props) => {
         <SelectInput
           label="Type"
           source="type"
+          allowEmpty
+          emptyText="<no type>"
           choices={vehicleTypes}
           fullWidth={isSmall}
         />

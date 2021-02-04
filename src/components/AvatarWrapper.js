@@ -19,15 +19,16 @@ const AvatarWrapper = ({ record, source }) => {
       new Date(record.lastupdate).setHours(0, 0, 0, 0)
       ? true
       : false;
-  console.log("reloadImage ", record.name, " => ", reloadImage);
+  // console.log("reloadImage ", record.name, " => ", reloadImage);
   const [imageReloaded, setImageReloaded] = useState(reloadImage);
-  // Reload the images after 3 second. That's needed because of the server image resizing.
+  // Reload the images after 4 second. That's needed because of the server image resizing.
   useEffect(() => {
     if (!imageReloaded) {
       const timeout = setTimeout(() => {
         setImageUrl(imageUrl + "?" + new Date());
+        console.log("Image reloaded => ", imageUrl + "?" + new Date());
         setImageReloaded(true);
-      }, 3000);
+      }, 4000);
       return () => {
         clearTimeout(timeout);
       };

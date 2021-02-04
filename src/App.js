@@ -6,6 +6,9 @@ import VehicleEdit from "./components/VehicleEdit";
 import CommuteTwoToneIcon from "@material-ui/icons/CommuteTwoTone";
 import { dataProvider, authProvider } from "./firebaseProviders";
 import theme from "./theme";
+import profile from "./profile";
+import { Route } from "react-router-dom";
+import MyLayout from "./MyLayout";
 
 function App() {
   return (
@@ -14,6 +17,10 @@ function App() {
       dataProvider={dataProvider}
       authProvider={authProvider}
       theme={theme}
+      customRoutes={[
+        <Route key="my-profile" path="/my-profile" component={profile.edit} />,
+      ]}
+      appLayout={MyLayout}
     >
       <Resource
         icon={CommuteTwoToneIcon}
@@ -23,6 +30,7 @@ function App() {
         create={VehicleCreate}
         edit={VehicleEdit}
       />
+      <Resource name="profile" />
     </Admin>
   );
 }
