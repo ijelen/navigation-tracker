@@ -1,9 +1,10 @@
-import firebase from "firebase";
 import {
   FirebaseAuthProvider,
   FirebaseDataProvider,
 } from "react-admin-firebase";
 import { GET_ONE, UPDATE } from "react-admin";
+import firebase from "firebase";
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
@@ -15,6 +16,7 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_measurementId,
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 const options = {
   logging: true,
   app: firebaseApp,
